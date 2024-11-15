@@ -1,0 +1,169 @@
+{% comment %}
+  Section: Seamless Independent Scrolling Banner
+  Description: Independent scrolling banner instances with unique settings and seamless scrolling.
+{% endcomment %}
+
+<div class="scrolling-banner-wrapper" id="scrolling-banner-{{ section.id }}" 
+     style="background-color: {{ section.settings.background_color }}; color: {{ section.settings.text_color }}; font-size: {{ section.settings.font_size }}px;">
+  <div class="scrolling-banner">
+    <div class="scrolling-content" style="--animation-duration: {{ section.settings.speed }}s;">
+      {% for i in (1..3) %}
+        {% if section.settings.text_message_1 != blank %}
+          <span class="scrolling-text" style="margin-right: {{ section.settings.spacing_between_texts }}px;">
+            {{ section.settings.text_message_1 }}
+          </span>
+        {% endif %}
+        {% if section.settings.text_message_2 != blank %}
+          <span class="scrolling-text" style="margin-right: {{ section.settings.spacing_between_texts }}px;">
+            {{ section.settings.text_message_2 }}
+          </span>
+        {% endif %}
+        {% if section.settings.text_message_3 != blank %}
+          <span class="scrolling-text" style="margin-right: {{ section.settings.spacing_between_texts }}px;">
+            {{ section.settings.text_message_3 }}
+          </span>
+        {% endif %}
+        {% if section.settings.text_message_4 != blank %}
+          <span class="scrolling-text" style="margin-right: {{ section.settings.spacing_between_texts }}px;">
+            {{ section.settings.text_message_4 }}
+          </span>
+        {% endif %}
+        {% if section.settings.text_message_5 != blank %}
+          <span class="scrolling-text" style="margin-right: {{ section.settings.spacing_between_texts }}px;">
+            {{ section.settings.text_message_5 }}
+          </span>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<style>
+  /* Wrapper styling */
+  #scrolling-banner-{{ section.id }} {
+    overflow: hidden;
+    padding: 10px;
+    white-space: nowrap;
+  }
+
+  /* Scrolling banner setup */
+  #scrolling-banner-{{ section.id }} .scrolling-banner {
+    display: flex;
+    white-space: nowrap;
+  }
+
+  /* Keyframes for seamless scrolling in both directions */
+  @keyframes scroll-left-{{ section.id }} {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-33.33%); }
+  }
+
+  @keyframes scroll-right-{{ section.id }} {
+    0% { transform: translateX(-33.33%); }
+    100% { transform: translateX(0); }
+  }
+
+  /* Scrolling content styling with animation based on direction */
+  #scrolling-banner-{{ section.id }} .scrolling-content {
+    display: inline-flex;
+    animation: scroll-{{ section.settings.direction }}-{{ section.id }} var(--animation-duration) linear infinite;
+  }
+
+  /* Style for each text message */
+  #scrolling-banner-{{ section.id }} .scrolling-text {
+    display: inline-block;
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Scrolling Banner",
+  "settings": [
+    {
+      "type": "text",
+      "id": "text_message_1",
+      "label": "Banner Message 1",
+      "default": "Free Shipping on Orders Over $50"
+    },
+    {
+      "type": "text",
+      "id": "text_message_2",
+      "label": "Banner Message 2",
+      "default": "New Arrivals are Here!"
+    },
+    {
+      "type": "text",
+      "id": "text_message_3",
+      "label": "Banner Message 3",
+      "default": "Sale up to 50% Off!"
+    },
+    {
+      "type": "text",
+      "id": "text_message_4",
+      "label": "Banner Message 4",
+      "default": "Limited Time Offers"
+    },
+    {
+      "type": "text",
+      "id": "text_message_5",
+      "label": "Banner Message 5",
+      "default": "Shop Now!"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background Color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "range",
+      "id": "font_size",
+      "label": "Font Size",
+      "min": 12,
+      "max": 36,
+      "default": 18,
+      "unit": "px"
+    },
+    {
+      "type": "select",
+      "id": "direction",
+      "label": "Scroll Direction",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "range",
+      "id": "speed",
+      "label": "Scroll Speed (seconds)",
+      "min": 10,
+      "max": 100,
+      "default": 30,
+      "unit": "s"
+    },
+    {
+      "type": "range",
+      "id": "spacing_between_texts",
+      "label": "Spacing Between Texts (px)",
+      "min": 10,
+      "max": 100,
+      "default": 50,
+      "unit": "px"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Scrolling Banner",
+      "category": "Banner"
+    }
+  ]
+}
+{% endschema %}
