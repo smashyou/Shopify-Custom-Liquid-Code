@@ -3,7 +3,7 @@
   Add this section to your Shopify theme and customize reviews in the section settings
 {% endcomment %}
 
-<div class="trustpilot-section">
+<div class="trustpilot-section" style="background-color: {{ section.settings.background_color }};">
   <div class="trustpilot-heading">
     <h2 style="font-family: inherit; font-size: {{ section.settings.heading_font_size }}; font-weight: {{ section.settings.heading_font_weight }}; font-style: {{ section.settings.heading_font_style }};">
       {{ section.settings.heading_text }}
@@ -79,7 +79,6 @@
   .trustpilot-section {
       text-align: center;
       padding: 40px 20px;
-      background-color: #f4f7f5;
   }
 
   .trustpilot-heading h2 {
@@ -171,6 +170,12 @@
       "id": "star_color",
       "label": "Star Color",
       "default": "#6dc66d"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background Color",
+      "default": "#f4f7f5"
     },
     {
       "type": "range",
