@@ -1,0 +1,249 @@
+{% comment %}
+  Trustpilot Review Section with Header, Average Rating, and Review Cards
+  Add this section to your Shopify theme and customize reviews in the section settings
+{% endcomment %}
+
+<div class="trustpilot-section">
+  <div class="trustpilot-heading">
+    <h2 style="font-family: inherit; font-size: {{ section.settings.heading_font_size }}; font-weight: {{ section.settings.heading_font_weight }}; font-style: {{ section.settings.heading_font_style }};">
+      {{ section.settings.heading_text }}
+    </h2>
+    <p>
+      {{ section.settings.review_summary }}
+      <strong>{{ section.settings.review_rating }}</strong>
+      <span class="stars" style="display: inline-flex; gap: 2px; vertical-align: middle;">
+        {% assign full_stars = section.settings.review_rating | floor %}
+        {% assign fractional_star = section.settings.review_rating | minus: full_stars %}
+        {% assign fractional_star_percentage = fractional_star | times: 100 | floor %}
+        {% assign next_star = full_stars | plus: 1 %}
+        {% for i in (1..5) %}
+          <span style="display: inline-block; width: 1em; height: 1em; position: relative; text-align: center; line-height: 1em;">
+            {% if i <= full_stars %}
+              <!-- Full star -->
+              <span style="color: {{ section.settings.star_color }}; font-size: 1em;">★</span>
+            {% elsif i == next_star %}
+              <!-- Fractional star -->
+              <span style="color: gray; font-size: 1em; position: absolute; left: 0; top: 0;">★</span>
+              <span style="color: {{ section.settings.star_color }}; font-size: 1em; position: absolute; left: 0; top: 0; width: {{ fractional_star_percentage }}%; overflow: hidden; white-space: nowrap;"
+                >★</span
+              >
+            {% else %}
+              <!-- Empty star -->
+              <span style="color: gray; font-size: 1em;">★</span>
+            {% endif %}
+          </span>
+        {% endfor %}
+      </span>
+      <br>
+      <small style="font-size: 0.9em; color: #666;">{{ section.settings.review_count_text }}</small>
+    </p>
+  </div>
+  <div class="trustpilot-cards">
+    {% for block in section.blocks %}
+      <div class="trustpilot-card">
+        <div class="star-rating" style="display: inline-flex; gap: 2px; vertical-align: middle;">
+          {% assign full_stars = block.settings.star_rating | floor %}
+          {% assign fractional_star = block.settings.star_rating | minus: full_stars %}
+          {% assign fractional_star_percentage = fractional_star | times: 100 | floor %}
+          {% assign next_star = full_stars | plus: 1 %}
+          {% for i in (1..5) %}
+            <span style="display: inline-block; width: 1em; height: 1em; position: relative; text-align: center; line-height: 1em;">
+              {% if i <= full_stars %}
+                <!-- Full star -->
+                <span style="color: {{ section.settings.star_color }}; font-size: 1em;">★</span>
+              {% elsif i == next_star %}
+                <!-- Fractional star -->
+                <span style="color: gray; font-size: 1em; position: absolute; left: 0; top: 0;">★</span>
+                <span style="color: {{ section.settings.star_color }}; font-size: 1em; position: absolute; left: 0; top: 0; width: {{ fractional_star_percentage }}%; overflow: hidden; white-space: nowrap;"
+                  >★</span
+                >
+              {% else %}
+                <!-- Empty star -->
+                <span style="color: gray; font-size: 1em;">★</span>
+              {% endif %}
+            </span>
+          {% endfor %}
+        </div>
+        <h3>{{ block.settings.review_title }}</h3>
+        <p>{{ block.settings.review_content }}</p>
+        <p class="author" style="font-size: 0.8em; color: #aaa;">
+          <span>{{ block.settings.review_author }}</span> - <span>{{ block.settings.review_date }}</span>
+        </p>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+<style>
+  /* Trustpilot Section Styling */
+  .trustpilot-section {
+      text-align: center;
+      padding: 40px 20px;
+      background-color: #f4f7f5;
+  }
+
+  .trustpilot-heading h2 {
+      font-family: inherit; /* Ensures it uses the theme font */
+      margin-bottom: 10px;
+  }
+
+  .trustpilot-heading p {
+      font-family: inherit; /* Ensures consistency */
+  }
+
+  .trustpilot-heading small {
+      font-family: inherit;
+      font-size: 0.9em;
+      color: #666;
+  }
+
+  .trustpilot-cards {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+  }
+
+  .trustpilot-card {
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      width: 300px;
+      padding: 20px;
+      text-align: left;
+      margin-bottom: 10px;
+  }
+
+  .trustpilot-card h3 {
+      font-family: inherit; /* Ensures it uses the theme font */
+      font-size: inherit;
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 8px;
+  }
+
+  .trustpilot-card p {
+      font-family: inherit; /* Ensures it uses the theme font */
+      font-size: inherit;
+      color: #555;
+      line-height: 1.5;
+      margin: 0 0 10px;
+  }
+
+  .trustpilot-card .author {
+      font-family: inherit; /* Ensures it uses the theme font */
+      font-size: 0.8em; /* Smaller size for author name and review date */
+      color: #aaa; /* Lighter gray for author name and review date */
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Trustpilot Review Section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading_text",
+      "label": "Heading Text",
+      "default": "OUR CUSTOMERS SAY IT BETTER"
+    },
+    {
+      "type": "text",
+      "id": "review_summary",
+      "label": "Review Summary Text",
+      "default": "Excellent"
+    },
+    {
+      "type": "text",
+      "id": "review_rating",
+      "label": "Review Rating (Decimal)",
+      "default": "4.5"
+    },
+    {
+      "type": "text",
+      "id": "review_count_text",
+      "label": "Review Count Text",
+      "default": "Based on 2,621+ Reviews"
+    },
+    {
+      "type": "color",
+      "id": "star_color",
+      "label": "Star Color",
+      "default": "#6dc66d"
+    },
+    {
+      "type": "range",
+      "id": "heading_font_size",
+      "label": "Heading Font Size (px)",
+      "default": 28,
+      "min": 12,
+      "max": 50
+    },
+    {
+      "type": "select",
+      "id": "heading_font_weight",
+      "label": "Heading Font Weight",
+      "default": "bold",
+      "options": [
+        { "value": "normal", "label": "Normal" },
+        { "value": "bold", "label": "Bold" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "heading_font_style",
+      "label": "Heading Font Style",
+      "default": "normal",
+      "options": [
+        { "value": "normal", "label": "Normal" },
+        { "value": "italic", "label": "Italic" }
+      ]
+    }
+  ],
+  "blocks": [
+    {
+      "type": "review_card",
+      "name": "Review Card",
+      "settings": [
+        {
+          "type": "text",
+          "id": "star_rating",
+          "label": "Star Rating (Decimal)",
+          "default": "4.5"
+        },
+        {
+          "type": "text",
+          "id": "review_title",
+          "label": "Review Title",
+          "default": "Shiny and New!"
+        },
+        {
+          "type": "textarea",
+          "id": "review_content",
+          "label": "Review Content",
+          "default": "I am an Esthetician and I love using this on my clients. I love high frequency for so many reasons and this handheld wand makes moving around the spa room so effortless."
+        },
+        {
+          "type": "text",
+          "id": "review_author",
+          "label": "Author Name",
+          "default": "Jenna"
+        },
+        {
+          "type": "text",
+          "id": "review_date",
+          "label": "Review Date",
+          "default": "30 September"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Trustpilot Reviews",
+      "category": "Custom Sections"
+    }
+  ]
+}
+{% endschema %}
