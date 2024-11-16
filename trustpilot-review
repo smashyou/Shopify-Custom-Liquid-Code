@@ -5,7 +5,7 @@
 
 <div class="trustpilot-section" style="background-color: {{ section.settings.background_color }};">
   <div class="trustpilot-heading">
-    <h2 style="font-family: inherit; font-size: {{ section.settings.heading_font_size }}; font-weight: {{ section.settings.heading_font_weight }}; font-style: {{ section.settings.heading_font_style }};">
+    <h2 style="font-size: {{ section.settings.heading_font_size }}px; font-weight: {{ section.settings.heading_font_weight }}; font-style: {{ section.settings.heading_font_style }};">
       {{ section.settings.heading_text }}
     </h2>
     <p>
@@ -77,63 +77,48 @@
 <style>
   /* Trustpilot Section Styling */
   .trustpilot-section {
-      text-align: center;
-      padding: 40px 20px;
+    text-align: center;
+    padding: 40px 20px;
   }
 
   .trustpilot-heading h2 {
-      font-family: inherit; /* Ensures it uses the theme font */
-      margin-bottom: 10px;
+    margin-bottom: 10px;
   }
 
   .trustpilot-heading p {
-      font-family: inherit; /* Ensures consistency */
-  }
-
-  .trustpilot-heading small {
-      font-family: inherit;
-      font-size: 0.9em;
-      color: #666;
+    margin-bottom: 0;
   }
 
   .trustpilot-cards {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 20px;
   }
 
   .trustpilot-card {
-      background-color: white;
-      border-radius: 8px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      width: 300px;
-      padding: 20px;
-      text-align: left;
-      margin-bottom: 10px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    padding: 20px;
+    text-align: left;
+    margin-bottom: 10px;
   }
 
   .trustpilot-card h3 {
-      font-family: inherit; /* Ensures it uses the theme font */
-      font-size: inherit;
-      font-weight: bold;
-      color: #333;
-      margin-bottom: 8px;
+    margin-bottom: 8px;
   }
 
   .trustpilot-card p {
-      font-family: inherit; /* Ensures it uses the theme font */
-      font-size: inherit;
-      color: #555;
-      line-height: 1.5;
-      margin: 0 0 10px;
+    margin-bottom: 10px;
+    line-height: 1.5;
   }
 
   .trustpilot-card .author {
-      font-family: inherit; /* Ensures it uses the theme font */
-      font-size: 0.8em; /* Smaller size for author name and review date */
-      color: #aaa; /* Lighter gray for author name and review date */
+    font-size: 0.8em;
+    color: #aaa;
   }
 </style>
 
@@ -166,18 +151,6 @@
       "default": "Based on 2,621+ Reviews"
     },
     {
-      "type": "color",
-      "id": "star_color",
-      "label": "Star Color",
-      "default": "#6dc66d"
-    },
-    {
-      "type": "color",
-      "id": "background_color",
-      "label": "Background Color",
-      "default": "#f4f7f5"
-    },
-    {
       "type": "range",
       "id": "heading_font_size",
       "label": "Heading Font Size (px)",
@@ -204,6 +177,18 @@
         { "value": "normal", "label": "Normal" },
         { "value": "italic", "label": "Italic" }
       ]
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background Color",
+      "default": "#f4f7f5"
+    },
+    {
+      "type": "color",
+      "id": "star_color",
+      "label": "Star Color",
+      "default": "#6dc66d"
     }
   ],
   "blocks": [
@@ -239,7 +224,7 @@
           "type": "text",
           "id": "review_date",
           "label": "Review Date",
-          "default": "30 September"
+          "default": "September 30"
         }
       ]
     }
