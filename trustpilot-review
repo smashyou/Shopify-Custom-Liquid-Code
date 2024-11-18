@@ -38,6 +38,8 @@
       <small style="font-size: 0.9em; color: #666;">{{ section.settings.review_count_text }}</small>
     </p>
   </div>
+
+  <!-- Container for Cards -->
   <div class="trustpilot-cards">
     {% for block in section.blocks %}
       <div class="trustpilot-card">
@@ -66,7 +68,7 @@
         </div>
         <h3>{{ block.settings.review_title }}</h3>
         <p>{{ block.settings.review_content }}</p>
-        <p class="author" style="font-size: 0.8em; color: #aaa;">
+        <p class="author">
           <span>{{ block.settings.review_author }}</span> - <span>{{ block.settings.review_date }}</span>
         </p>
       </div>
@@ -75,11 +77,12 @@
 </div>
 
 <style>
-  /* Trustpilot Section Styling */
+    /* Trustpilot Section Styling */
+    /* General Styling */
   .trustpilot-section {
-    text-align: center;
-    padding: 40px 20px;
-  }
+      text-align: center;
+      padding: 40px 20px;
+    }
 
   .trustpilot-heading h2 {
     margin-bottom: 10px;
@@ -89,38 +92,116 @@
     margin-bottom: 0;
   }
 
+  /* Cards Container */
   .trustpilot-cards {
     display: flex;
-    justify-content: center;
-    gap: 10px;
     flex-wrap: wrap;
-    margin-top: 20px;
+    gap: 15px;
+    justify-content: center;
+    align-items: flex-start; /* Ensures independent heights for cards */
   }
 
+  /* Individual Cards */
   .trustpilot-card {
+    flex: 1 1 calc(33.33% - 30px); /* 3 cards per row with responsive gaps */
+    max-width: 300px; /* Prevent cards from growing too large */
     background-color: white;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 300px;
     padding: 20px;
     text-align: left;
-    margin-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    overflow: hidden;
   }
 
+  /* Title Styling */
   .trustpilot-card h3 {
-    margin-bottom: 8px;
+    margin-bottom: 10px;
+    font-size: 1.2rem;
+    line-height: 1.4;
+    min-height: 40px; /* Ensures consistent title height */
+    max-height: 40px; /* Prevents title expansion */
+    overflow: hidden;
+    text-overflow: ellipsis; /* Truncate long titles */
+    white-space: nowrap;
   }
 
+  /* Content Styling */
   .trustpilot-card p {
     margin-bottom: 10px;
+    font-size: 1rem;
     line-height: 1.5;
+    max-height: 120px; /* Limits the content height */
+    overflow-y: auto; /* Allows scrolling for long content */
   }
 
+  /* Author Styling */
   .trustpilot-card .author {
-    font-size: 0.8em;
+    font-size: 0.9rem;
     color: #aaa;
   }
+
+  /* Responsive Design */
+  @media (max-width: 1024px) {
+    .trustpilot-card {
+      flex: 1 1 calc(50% - 20px); /* 2 cards per row */
+    }
+  }
+
+  @media (max-width: 768px) {
+    .trustpilot-cards {
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+    }
+
+    .trustpilot-card {
+      flex: 0 0 80%; /* Show 80% of the card width */
+      margin: 0 auto;
+      scroll-snap-align: center;
+    }
+  }
+
+
+    /* Headings and Content */
+    .trustpilot-card h3 {
+      margin-bottom: 10px;
+      font-size: 1.2rem;
+    }
+
+    .trustpilot-card p {
+      margin-bottom: 10px;
+      font-size: 1rem;
+      line-height: 1.5;
+    }
 </style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const cardsWrapper = document.querySelector('.trustpilot-cards');
+    const prevArrow = document.querySelector('.prev-arrow');
+    const nextArrow = document.querySelector('.next-arrow');
+  
+    let scrollPosition = 0;
+  
+    const scrollAmount = cardsWrapper.offsetWidth / 2; // Scroll half the width of the container
+  
+    prevArrow.addEventListener('click', () => {
+      scrollPosition -= scrollAmount;
+      if (scrollPosition < 0) scrollPosition = 0;
+      cardsWrapper.style.transform = `translateX(-${scrollPosition}px)`;
+    });
+  
+    nextArrow.addEventListener('click', () => {
+      scrollPosition += scrollAmount;
+      const maxScroll = cardsWrapper.scrollWidth - cardsWrapper.offsetWidth;
+      if (scrollPosition > maxScroll) scrollPosition = maxScroll;
+      cardsWrapper.style.transform = `translateX(-${scrollPosition}px)`;
+    });
+  });
+</script>
 
 {% schema %}
 {
