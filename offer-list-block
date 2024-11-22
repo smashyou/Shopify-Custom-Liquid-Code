@@ -1,0 +1,349 @@
+
+
+Add this code in the "main-product.liquid" below this code block:
+********************************************************************************************************************
+    <product-info
+          id="ProductInfo-{{ section.id }}"
+          data-section="{{ section.id }}"
+          data-url="{{ product.url }}"
+          class="product__info-container{% if section.settings.enable_sticky_info %} product__column-sticky{% endif %}"
+        >
+          {%- assign product_form_id = 'product-form-' | append: section.id -%}
+
+          {%- for block in section.blocks -%}
+            {%- case block.type -%}
+              {%- when '@app' -%}
+                {% render block %}
+              {%- when 'text' -%}
+                <p
+                  class="product__text inline-richtext{% if block.settings.text_style == 'uppercase' %} caption-with-letter-spacing{% elsif block.settings.text_style == 'subtitle' %} subtitle{% endif %}"
+                  {{ block.shopify_attributes }}
+                >
+                  {{- block.settings.text -}}
+                </p>
+              {%- when 'title' -%}
+                <div class="product__title" {{ block.shopify_attributes }}>
+                  <h1>{{ product.title | escape }}</h1>
+                  <a href="{{ product.url }}" class="product__title">
+                    <h2 class="h1">
+                      {{ product.title | escape }}
+                    </h2>
+                  </a>
+                </div>
+             
+          -->>> // Add the code here //
+
+
+          <--- Copy and paste the custom code below --->
+
+                <!-- Offer-list Container - Product Bundle Offer -->
+                <!-- Offer Container - Dynamically Editable -->
+                {% comment %}
+                  Liquid logic for calculating Total Value, Today's Price, and You Save
+                {% endcomment %}
+                {% assign total_original_price = product.compare_at_price | plus: 0 %}
+                {% assign total_offer_price = product.price %}
+                {% assign offered_prices_array = section.settings.offer_prices | split: ',' %}
+
+                {% for offer_price in offered_prices_array %}
+                  {% if offer_price != '0' and offer_price != blank %}
+                    {% assign total_offer_price = total_offer_price | plus: offer_price %}
+                  {% endif %}
+                {% endfor %}
+
+                {% for offer_product in section.settings.offer_products %}
+                  {% if offer_product.compare_at_price %}
+                    {% assign total_original_price = total_original_price | plus: offer_product.compare_at_price %}
+                  {% else %}
+                    {% assign total_original_price = total_original_price | plus: offer_product.price %}
+                  {% endif %}
+                {% endfor %}
+
+                {% if section.settings.include_free_shipping %}
+                  {% assign total_original_price = total_original_price
+                    | plus: section.settings.normal_shipping_value
+                  %}
+                {% endif %}
+
+                {% assign total_savings = total_original_price | minus: total_offer_price %}
+                {% if total_original_price > 0 %}
+                  {% assign total_savings_percent = total_savings | times: 100 | divided_by: total_original_price %}
+                {% else %}
+                  {% assign total_savings_percent = 0 %}
+                {% endif %}
+
+                <div class="offer-container">
+                  <!-- "What's Included" Section -->
+                  <div class="offer-items-container">
+                    <h2 class="offer-heading">What’s Included:</h2>
+                    <ul class="offer-items">
+                      <!-- Main Product (Always on Top) -->
+                      <li class="offer-item">
+                        {% if product.featured_image %}
+                          <img
+                            src="{{ product.featured_image | img_url: '100x100' }}"
+                            alt="{{ product.title }}"
+                            class="product-thumbnail"
+                          >
+                        {% endif %}
+                        <div class="product-details">
+                          <strong class="product-title">{{ product.title }}</strong>
+                          <span class="prices">
+                            <span class="original-price">Normally {{ product.compare_at_price | money }}</span>
+                            <span class="offer-price">- {{ product.price | money }}</span>
+                          </span>
+                        </div>
+                      </li>
+
+                      <!-- Offer Products -->
+                      {% for offer_product in section.settings.offer_products %}
+                        <li class="offer-item">
+                          {% if offer_product.featured_image %}
+                            <img
+                              src="{{ offer_product.featured_image | img_url: '100x100' }}"
+                              alt="{{ offer_product.title }}"
+                              class="product-thumbnail"
+                            >
+                          {% endif %}
+                          <div class="product-details">
+                            <strong class="product-title">{{ offer_product.title }}</strong>
+                            <span class="prices">
+                              {% if offer_product.compare_at_price %}
+                                <span class="original-price"
+                                  >Normally {{ offer_product.compare_at_price | money -}}
+                                </span>
+                              {% else %}
+                                <span class="original-price">Normally {{ offer_product.price | money }}</span>
+                              {% endif %}
+                              {% assign offer_price = offered_prices_array[forloop.index0] %}
+                              {% if offer_price == '0' or offer_price == blank %}
+                                <span class="offer-price">- FREE</span>
+                              {% else %}
+                                <span class="offer-price">- {{ offer_price | money }}</span>
+                              {% endif %}
+                            </span>
+                          </div>
+                        </li>
+                      {% endfor %}
+
+                      <!-- Free Shipping -->
+                      {% if section.settings.include_free_shipping %}
+                        <li class="offer-item">
+                          {% if section.settings.free_shipping_image != blank %}
+                            <img
+                              src="{{ section.settings.free_shipping_image | image_url }}"
+                              alt="Free Shipping"
+                              class="product-thumbnail"
+                            >
+                          {% else %}
+                            <img
+                              src="https://www.pngfind.com/pngs/m/2-20656_free-shipping-graphic-design-hd-png-download.png"
+                              alt="Free Shipping"
+                              class="product-thumbnail"
+                            >
+                          {% endif %}
+                          <div class="product-details">
+                            <strong class="product-title">Free Shipping</strong>
+                            <span class="prices">
+                              <span class="original-price"
+                                >Normally {{ section.settings.normal_shipping_value | money -}}
+                              </span>
+                              <span class="offer-price">- FREE</span>
+                            </span>
+                          </div>
+                        </li>
+                      {% endif %}
+                    </ul>
+                  </div>
+
+                  <!-- Results Section Below Products -->
+                  <div class="results-container">
+                    <div class="total-value">
+                      <p class="highlight">
+                        <strong>Total Value:</strong>
+                        <span class="original-price">Normally {{ total_original_price | money }}</span>
+                      </p>
+                      <p class="highlight">
+                        <strong>Today's Price:</strong> <span class="offer-price">{{ total_offer_price | money }}</span>
+                      </p>
+                      <p class="highlight">
+                        <strong>You Save:</strong>
+                        <span class="savings">{{ total_savings | money }} ({{ total_savings_percent | round }}%)</span>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <!-- offer-list container end -->
+********************************************************************************************************************
+
+
+Schema
+********************************************************************************************************************
+Add following Schema in "main-product.liquid" file, just above "{% endSchema %}" which is all the way at the bottom.
+
+
+Where to add the custom code:
+
+{
+  "settings: [
+    {
+      ... existing code...
+    },
+<paste it here after the ",">
+  ]
+}
+{% endschema %} 
+
+
+
+<--- Copy and paste the code below --->
+
+    {
+      "type": "product_list",
+      "id": "offer_products",
+      "label": "Offer Products",
+      "limit": 10,
+      "info": "Select products to include in the offer. These products will display their original and offered prices."
+    },
+    {
+      "type": "text",
+      "id": "offer_prices",
+      "label": "Offered Prices (Comma-Separated)",
+      "info": "Enter the offered prices for each product in the same order as selected products. Use '0' for Free. Separate values with commas."
+    },
+    {
+      "type": "checkbox",
+      "id": "include_free_shipping",
+      "label": "Include Free Shipping",
+      "default": false,
+      "info": "Check this option to include free shipping as part of the offer."
+    },
+    {
+      "type": "image_picker",
+      "id": "free_shipping_image",
+      "label": "Upload Free Shipping Image",
+      "info": "Upload an image for Free Shipping"
+    },
+    {
+      "type": "text",
+      "id": "normal_shipping_value",
+      "label": "Normal Shipping Value",
+      "default": "0",
+      "info": "Enter the value of Normal Shipping"
+    }
+
+********************************************************************************************************************
+
+
+
+
+CSS Styling
+********************************************************************************************************************
+For styling, copy and paste this code in either "base.css" or "theme.liquid"
+*** If adding in "theme.liquid" wrap the custom code with style tag -> <style>...</style> ***
+*** Add the code into "theme.liquid" to ensure responsiveness in mobile view ***
+
+<--- custom css code --->
+
+/* General Offer Container Styling */
+.offer-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 10px 12px;
+  margin-top: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  width: fit-content; /* Dynamically adjusts based on content */
+  min-width: 400px; /* Default width for the container */
+  max-width: 100%; /* Prevent it from overflowing the screen */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.offer-heading {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.offer-items {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.offer-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.product-thumbnail {
+  width: 50px;
+  height: 50px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+}
+
+.product-details {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.prices {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.original-price {
+  text-decoration: line-through;
+  color: #999;
+  font-size: 1.2rem;
+}
+
+.offer-price {
+  color: #27ae60;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.results-container {
+  margin-top: 12px;
+  text-align: left;
+}
+
+.total-value p {
+  margin: 0;
+  font-size: 1.4rem;
+}
+
+.highlight {
+  font-size: 1.6rem;
+  font-weight: bold;
+}
+
+.savings {
+  color: #e74c3c;
+  font-weight: bold;
+  font-size: 1.6rem;
+}
+
+/* Responsive Styling */
+@media (max-width: 768px) {
+  .offer-container {
+    width: auto; /* Allow the container to adjust on smaller screens */
+  }
+}
+
+
+
+
+
+
+
