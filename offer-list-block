@@ -185,11 +185,11 @@ Add following Schema in "main-product.liquid" file, just above "{% endSchema %}"
 Where to add the custom code:
 
 {
-  "settings: [
+  "settings": [
     {
       ... existing code...
-    },
-<paste it here after the ",">
+    }
+<add "," after the "}" then paste the custom code>
   ]
 }
 {% endschema %} 
