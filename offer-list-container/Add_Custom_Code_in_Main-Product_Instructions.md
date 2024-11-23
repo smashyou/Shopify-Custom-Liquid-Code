@@ -9,9 +9,9 @@ Place the custom code between the following lines:
 {%- for block in section.blocks -%}
 ...
 {%- endfor -%}
-
-Code Example:
-
+```
+## Code Example:
+```liquid
 <product-info
   id="ProductInfo-{{ section.id }}"
   data-section="{{ section.id }}"
@@ -30,9 +30,9 @@ Code Example:
         ********************************
 
    {%- endfor -%}
-
-Custom Code:
-
+```
+## Custom Code:
+```liquid
   <!-- offer list container custom code start -->
   {%- when 'offer_container' -%}
     <div>
@@ -49,15 +49,13 @@ Custom Code:
       {%- endfor -%}
     </div>
   <!-- offer list container custom code end -->
+```
+## Adding Schema
+### Add the custom Schema code in the main-product.liquid file
+### Insert the custom Schema code within the blocks: [...] section between {%- schema -%} and {%- endschema -%}.
 
-Adding Schema
-
-Add the custom Schema code in the main-product.liquid file
-
-Insert the custom Schema code within the blocks: [...] section between {%- schema -%} and {%- endschema -%}.
-
-Code Example:
-
+## Code Example:
+```liquid
 {% schema %}
 {
   "name": "t:sections.main-product.name",
@@ -77,9 +75,10 @@ Code Example:
   ]
 }
 {% endschema %}
+```
 
-Custom Schema Code:
-
+## Custom Schema Code:
+```liquid
 {
   "type": "offer_container",
   "name": "Offer List Container",
@@ -119,3 +118,4 @@ Custom Schema Code:
     }
   ]
 }
+```
