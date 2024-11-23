@@ -19,6 +19,6 @@
 4. **Complete the Remaining Setup**  
    - Refer to the instructions in the following file from my GitHub repository:  
      ```plaintext
-     Adding_code_instructions_in_main-liquid.liquid_file
+     Add_Custom_Code_in_Main-Product_Instructions.md
      ```
    - Follow these instructions carefully to complete the implementation.
