@@ -1,0 +1,103 @@
+**********************************************************************
+*                                                                    *
+* Add this code in "theme.liquid" file withing <head>...</head> tag  *
+*                                                                    *
+**********************************************************************
+
+<style>
+  /* General Offer Container Styling */
+  .offer-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 10px 12px;
+    margin-top: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    width: fit-content; /* Dynamically adjusts based on content */
+    min-width: 400px; /* Default width for the container */
+    max-width: 100%; /* Prevent it from overflowing the screen */
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+  
+  .offer-heading {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .offer-items {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .offer-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .product-thumbnail {
+    width: 50px;
+    height: 50px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+  }
+  
+  .product-details {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .prices {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  
+  .original-price {
+    text-decoration: line-through;
+    color: #999;
+    font-size: 1.2rem;
+  }
+  
+  .offer-price {
+    color: #27ae60;
+    font-weight: bold;
+    font-size: 1.2rem;
+  }
+  
+  .results-container {
+    margin-top: 12px;
+    text-align: left;
+  }
+  
+  .total-value p {
+    margin: 0;
+    font-size: 1.4rem;
+  }
+  
+  .highlight {
+    font-size: 1.6rem;
+    font-weight: bold;
+  }
+  
+  .savings {
+    color: #e74c3c;
+    font-weight: bold;
+    font-size: 1.6rem;
+  }
+  
+  /* Responsive Styling */
+  @media (max-width: 768px) {
+    .offer-container {
+      width: auto; /* Allow the container to adjust on smaller screens */
+    }
+  }
+</style>
