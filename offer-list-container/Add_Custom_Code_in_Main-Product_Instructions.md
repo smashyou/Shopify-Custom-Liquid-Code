@@ -78,7 +78,7 @@ Place the custom code between the following lines:
 ```
 
 ## Custom Schema Code:
-```liquid
+```JSON
 {
   "type": "offer_container",
   "name": "Offer List Container",
