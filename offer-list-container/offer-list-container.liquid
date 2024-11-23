@@ -1,0 +1,134 @@
+<div class="offer-container">
+  <!-- "What's Included" Section -->
+  <div class="offer-items-container">
+    <h2 class="offer-heading">What’s Included:</h2>
+    <ul class="offer-items">
+      <!-- Main Product (Always on Top) -->
+      <li class="offer-item">
+        {% if product.featured_image %}
+          <img
+            src="{{ product.featured_image | img_url: '100x100' }}"
+            alt="{{ product.title }}"
+            class="product-thumbnail"
+          >
+        {% endif %}
+        <div class="product-details">
+          <strong class="product-title">{{ product.title }}</strong>
+          <span class="prices">
+            <span class="original-price">Normally {{ product.compare_at_price | money }}</span>
+            <span class="offer-price">- {{ product.price | money }}</span>
+          </span>
+        </div>
+      </li>
+
+      <!-- Offer Products -->
+      {% assign offered_prices_array = offer_prices | split: ',' %}
+      {% for offer_product in offer_products %}
+        {% if offer_product %}
+          <li class="offer-item">
+            {% if offer_product.featured_image %}
+              <img
+                src="{{ offer_product.featured_image | img_url: '100x100' }}"
+                alt="{{ offer_product.title }}"
+                class="product-thumbnail"
+              >
+            {% endif %}
+            <div class="product-details">
+              <strong class="product-title">{{ offer_product.title }}</strong>
+              <span class="prices">
+                {% if offer_product.compare_at_price %}
+                  <span class="original-price">Normally {{ offer_product.compare_at_price | money }}</span>
+                {% else %}
+                  <span class="original-price">Normally {{ offer_product.price | money }}</span>
+                {% endif %}
+                {% assign offer_price = offered_prices_array[forloop.index0] %}
+                {% if offer_price == '0' or offer_price == blank %}
+                  <span class="offer-price">- FREE</span>
+                {% else %}
+                  <span class="offer-price">- {{ offer_price | money }}</span>
+                {% endif %}
+              </span>
+            </div>
+          </li>
+        {% endif %}
+      {% endfor %}
+
+      <!-- Free Shipping -->
+      {% if include_free_shipping %}
+        <li class="offer-item">
+          {% if free_shipping_image != blank %}
+            <img
+              src="{{ free_shipping_image | file_url }}"
+              alt="Free Shipping"
+              class="product-thumbnail"
+            >
+          {% else %}
+            <img
+              src="https://www.pngfind.com/pngs/m/2-20656_free-shipping-graphic-design-hd-png-download.png"
+              alt="Free Shipping"
+              class="product-thumbnail"
+            >
+          {% endif %}
+          <div class="product-details">
+            <strong class="product-title">Free Shipping</strong>
+            <span class="prices">
+              <span class="original-price">Normally {{ normal_shipping_value | money }}</span>
+              <span class="offer-price">- FREE</span>
+            </span>
+          </div>
+        </li>
+      {% endif %}
+    </ul>
+  </div>
+
+  <!-- Results Section Below Products -->
+  <div class="results-container">
+    {% assign total_original_price = product.compare_at_price | plus: 0 %}
+    {% assign total_offer_price = product.price %}
+
+    <!-- Calculate Original Prices -->
+    {% for offer_product in offer_products %}
+      {% if offer_product %}
+        {% if offer_product.compare_at_price %}
+          {% assign total_original_price = total_original_price | plus: offer_product.compare_at_price %}
+        {% else %}
+          {% assign total_original_price = total_original_price | plus: offer_product.price %}
+        {% endif %}
+      {% endif %}
+    {% endfor %}
+
+    <!-- Add Free Shipping Value -->
+    {% if include_free_shipping %}
+      {% assign total_original_price = total_original_price | plus: normal_shipping_value %}
+    {% endif %}
+
+    <!-- Calculate Total Offer Prices -->
+    {% for offer_price in offered_prices_array %}
+      {% if offer_price != '0' and offer_price != blank %}
+        {% assign total_offer_price = total_offer_price | plus: offer_price %}
+      {% endif %}
+    {% endfor %}
+
+    <!-- Calculate Savings -->
+    {% assign total_savings = total_original_price | minus: total_offer_price %}
+    {% if total_original_price > 0 %}
+      {% assign total_savings_percent = total_savings | times: 100 | divided_by: total_original_price %}
+    {% else %}
+      {% assign total_savings_percent = 0 %}
+    {% endif %}
+    <div class="total-value">
+      <p class="highlight">
+        <strong>Total Value:</strong>
+        <span class="original-price">Normally {{ total_original_price | money }}</span>
+      </p>
+      <p class="highlight">
+        <strong>Today's Price:</strong>
+        <span class="offer-price">{{ total_offer_price | money }}</span>
+      </p>
+      <p class="highlight">
+        <strong>You Save:</strong>
+        <span class="savings">{{ total_savings | money }} ({{ total_savings_percent | round }}%)</span>
+      </p>
+    </div>
+  </div>
+</div>
